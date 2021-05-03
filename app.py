@@ -43,18 +43,12 @@ class Venue(db.Model):
     facebook_link = db.Column(db.String(120))
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
-    area_id = db.Column(db.Integer, db.ForeignKey('Area.id'), nullable=False)
-    genres = db.Column(db.String(120))
-    website = db.Column(db.String)
-    seeking_talent = db.Column(db.Boolean)
-    seeking_description = db.Column(db.String)
-    upcoming_shows_count = db.Column(db.Integer)
-    upcoming_shows = db.relationship('UpcomingShow', backref='Venue')
-    past_shows_count = db.Column(db.Integer)
-    past_shows = db.relationship('PastShow', backref='Venue')
-
-    def __repr__(self):
-        return f'Venue: id({self.id}), name({self.name})'
+    website = db.Column(db.String(120))
+    seeking_talent = db.Column(db.Boolean,default=False)
+    seeking_description = db.Column(db.Text)
+    upcoming_shows_count = db.Column(db.Integer, default=0)
+    past_shows_count = db.Column(db.Integer, default=0)
+    shows = db.relationship('Show',backref='venue',lazy=True)
 
 class Artist(db.Model):
     __tablename__ = 'Artist'
@@ -69,16 +63,12 @@ class Artist(db.Model):
     facebook_link = db.Column(db.String(120))
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
-    website = db.Column(db.String)
-    seeking_venues = db.Column(db.Boolean)
-    seeking_description = db.Column(db.String)
-    upcoming_shows_count = db.Column(db.Integer)
-    upcoming_shows = db.relationship('UpcomingShow', backref='Artist')
-    past_shows_count = db.Column(db.Integer)
-    past_shows = db.relationship('PastShow', backref='Artist')
-
-    def __repr__(self):
-        return f'Artist: id({self.id}), name({self.name})'
+    website = db.Column(db.String(120))
+    seeking_venue = db.Column(db.Boolean,default=False)
+    seeking_description = db.Column(db.Text)
+    upcoming_shows_count = db.Column(db.Integer, default=0)
+    past_shows_count = db.Column(db.Integer, default=0)
+    shows = db.relationship('Show',backref='artist',lazy=True)
 
 # TODO Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
 class Show(db.Model):
