@@ -137,7 +137,7 @@ def venues():
               "name": venue[1],
               "num_upcoming_shows":venue[2]
       })
-  return render_template('pages/venues.html', areas=data);
+  return render_template('pages/venues.html', areas=data)
 
 @app.route('/venues/search', methods=['POST'])
 def search_venues():
@@ -230,12 +230,16 @@ def create_venue_submission():
     flash('Venue ' + request.form['name'] + ' was successfully listed!')
   except:
     db.session.rollback()
+  finally:
+    db.sessio.close()
+
   # TODO: on unsuccessful db insert, flash an error instead.
+  if error:
     flash('An error occurred. Venue ' + request.form['name'] + ' could not be listed.')
+  if not error:
+      flash('Venue ' + request.form['name'] + ' was successfully listed!')
   # e.g., flash('An error occurred. Venue ' + data.name + ' could not be listed.')
   # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
-  except:
-    db.session.close()
   return redirect(url_for('index'))
 
 @app.route('/venues/<venue_id>', methods=['DELETE'])
