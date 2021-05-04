@@ -77,10 +77,8 @@ class Show(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     start_time = db.Column(db.DateTime, nullable=False)
-    artist = db.relationship( Artist, backref=db.backref('shows', cascade='all, delete')
-    )
-    venue = db.relationship(Venue, backref=db.backref('shows', cascade='all, delete')
-)
+    venue_id = db.Column(db.Integer, db.ForeignKey('venues.id'))
+    artist_id = db.Column(db.Integer, db.ForeignKey('artists.id'))
     
 
     #def __repr__(self):
