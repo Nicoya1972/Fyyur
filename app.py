@@ -13,6 +13,7 @@ import logging
 from logging import Formatter, FileHandler
 from flask_wtf import Form
 from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy import func
 from flask_migrate import Migrate
 from forms import *
 #----------------------------------------------------------------------------#
@@ -73,7 +74,7 @@ class Artist(db.Model):
 
 class Show(db.Model):
     __tablename__ = 'shows'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     artist_id = db.Column(db.Integer, db.ForeignKey(
         'artist.id'), nullable=False)
