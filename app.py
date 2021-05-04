@@ -46,10 +46,10 @@ class Venue(db.Model):
     website = db.Column(db.String(120))
     seeking_talent = db.Column(db.Boolean)
     seeking_description = db.Column(db.String(500))
-    shows = db.relationship('Show', backref=db.backref('venue'), lazy=True)
+    shows = db.relationship('Show', backref=db.backref('venue_id'), lazy=True)
 
-    def __repr__(self):
-        return '<Venue {}>'.format(self.name)
+    #def __repr__(self):
+        #return '<Venue {}>'.format(self.name)
 
 
 class Artist(db.Model):
@@ -66,10 +66,10 @@ class Artist(db.Model):
     facebook_link = db.Column(db.String(120))
     seeking_venue = db.Column(db.Boolean)
     seeking_description = db.Column(db.String(500))
-    shows = db.relationship('Show', backref=db.backref('artist'), lazy=True)
+    shows = db.relationship('Show', backref=db.backref('artist_id'), lazy=True)
 
-    def __repr__(self):
-        return '<Artist {}>'.format(self.name)
+    #def __repr__(self):
+        #return '<Artist {}>'.format(self.name)
 
 
 class Show(db.Model):
@@ -83,8 +83,8 @@ class Show(db.Model):
 )
     
 
-    def __repr__(self):
-        return '<Show {}{}>'.format(self.artist_id, self.venue_id)
+    #def __repr__(self):
+        #return '<Show {}{}>'.format(self.artist_id, self.venue_id)
 #----------------------------------------------------------------------------#
 # Filters.
 #----------------------------------------------------------------------------#
