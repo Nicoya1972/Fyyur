@@ -74,9 +74,9 @@ class Artist(db.Model):
 class Show(db.Model):
   __tablename__ = 'show'
   id = db.Column(db.Integer, primary_key=True)
-  venue_id = db.Column(db.Integer, db.ForeignKey("Venue.id"), nullable=False)
-  artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id'), nullable=False)
-  date_time = db.Column(db.DateTime, nullable=False)
+  venue_id = db.Column(db.Integer, db.ForeignKey("venue.id"), nullable=False)
+  artist_id = db.Column(db.Integer, db.ForeignKey('artist.id'), nullable=False)
+  start_time = db.Column(db.DateTime, nullable=False)
 
   def __repr__(self):
         return '<show {}{}>'.format(self.artist_id, self.venue_id)
@@ -110,7 +110,7 @@ def index():
 def venues():
   # TODO: replace with real venues data.
   #       num_shows should be aggregated based on number of upcoming shows per venue.
-  venues = Venue.query.all()
+  venues_location = venue.query.all()
   cities ={}
   data = []
   for v in venues:
@@ -137,7 +137,7 @@ def search_venues():
   # seach for Hop should return "The Musical Hop".
   # search for "Music" should return "The Musical Hop" and "Park Square Live Music & Coffee"
   earch_term = request.form['search_term']
-  venues = Venue.query.filter(Venue.name.ilike(f'%{search_term}%')).all()
+  venues = venue.query.filter(venue.name.ilike(f'%{search_term}%')).all()
   response={
     "count": len(venues),
     "data": [{
@@ -152,7 +152,7 @@ def search_venues():
 def show_venue(venue_id):
   # shows the venue page with the given venue_id
   # TODO: replace with real venue data from the venues table, using venue_id
-  venue = Venue.query.get(venue_id)
+  venue = venue.query.get(venue_id)
   if venue == None:
     return not_found_error(404)
 
@@ -238,7 +238,7 @@ def delete_venue(venue_id):
   # TODO: Complete this endpoint for taking a venue_id, and using
   # SQLAlchemy ORM to delete a record. Handle cases where the session commit could fail.
   venue_id = request.form.get('venue_id')
-  deleted_venue = Venue.query.get(venue_id)
+  deleted_venue = venue.query.get(venue_id)
   venueName = deleted_venue.name
   try:
     db.session.delete(deleted_venue)
@@ -258,7 +258,7 @@ def delete_venue(venue_id):
 @app.route('/artists')
 def artists():
   # TODO: replace with real data returned from querying the database
-  data = Artist.query.with_entities(Artist.id, Artist.name).all()
+  data = artist.query.with_entities(artist.id, artist.name).all()
   return render_template('pages/artists.html', artists=data)
 
 @app.route('/artists/search', methods=['POST'])
@@ -266,7 +266,7 @@ def search_artists():
   # TODO: implement search on artists with partial string search. Ensure it is case-insensitive.
   # seach for "A" should return "Guns N Petals", "Matt Quevado", and "The Wild Sax Band".
   # search for "band" should return "The Wild Sax Band".
-  results = Artist.query.filter(Artist.name.ilike('%{}%'.format(request.form['search_term']))).all()
+  results = artist.query.filter(artist.name.ilike('%{}%'.format(request.form['search_term']))).all()
 
   response={
     "count": len(results),
@@ -284,7 +284,7 @@ def search_artists():
 def show_artist(artist_id):
   # shows the artist page with the given artist_id
   # TODO: replace with real artist data from the artist table, using artist_id
-  artist_query = db.session.query(Artist).get(artist_id)
+  artist_query = db.session.query(artist).get(artist_id)
 
   if not artist_query: 
     return render_template('errors/404.html')
@@ -300,7 +300,7 @@ def show_artist(artist_id):
       "start_time": show.start_time.strftime('%Y-%m-%d %H:%M:%S')
     })
 
-  upcoming_shows_query = db.session.query(Show).join(Venue).filter(Show.artist_id==artist_id).filter(Show.start_time>datetime.now()).all()
+  upcoming_shows_query = db.session.query(show).join(venue).filter(Show.artist_id==artist_id).filter(show.start_time>datetime.now()).all()
   upcoming_shows = []
 
   for show in upcoming_shows_query:
@@ -446,7 +446,7 @@ def create_artist_submission():
     seeking_venue = True if 'seeking_venue' in request.form else False
     seeking_description = request.form['seeking_description']
 
-    artist = Artist(name=name, city=city, state=state, phone=phone, genres=genres, facebook_link=facebook_link, image_link=image_link, website=website, seeking_venue=seeking_venue, seeking_description=seeking_description)
+    artist_create = artist(name=name, city=city, state=state, phone=phone, genres=genres, facebook_link=facebook_link, image_link=image_link, website=website, seeking_venue=seeking_venue, seeking_description=seeking_description)
     db.session.add(artist)
     db.session.commit()
   except: 
