@@ -16,7 +16,7 @@ from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy import func
 from flask_migrate import Migrate
 from forms import *
-from models import *
+from model import *
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
@@ -28,9 +28,6 @@ db = SQLAlchemy(app)
 
 # TODO: connect to a local postgresql database
 migrate = Migrate(app, db)
-#----------------------------------------------------------------------------#
-# Models.
-#----------------------------------------------------------------------------#
 
 #----------------------------------------------------------------------------#
 # Filters.
