@@ -15,10 +15,10 @@ class Venue(db.Model):
     website = db.Column(db.String(120))
     seeking_talent = db.Column(db.Boolean)
     seeking_description = db.Column(db.String(500))
-    shows = db.relationship('Show', backref=db.backref('Venue'), lazy=True)
-
-    #def __repr__(self):
-        #return '<Venue {}>'.format(self.name)
+    shows = db.relationship('Show', backref='venue', lazy='dynamic')
+    
+    def __repr__(self):
+        return f'Venue {self.id}: {self.name}'
 
 
 class Artist(db.Model):
@@ -35,10 +35,10 @@ class Artist(db.Model):
     facebook_link = db.Column(db.String(120))
     seeking_venue = db.Column(db.Boolean)
     seeking_description = db.Column(db.String(500))
-    shows = db.relationship('Show', backref=db.backref('Artist'), lazy=True)
-
-    #def __repr__(self):
-        #return '<Artist {}>'.format(self.name)
+    shows = db.relationship('Show', backref='artist', lazy='dynamic')
+    
+    def __repr__(self):
+        return f'Artist {self.id}: {self.name}'
 
 
 class Show(db.Model):
@@ -46,9 +46,8 @@ class Show(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     start_time = db.Column(db.DateTime, nullable=False)
-    venue_id = db.Column(db.Integer, db.ForeignKey('venues.id'))
-    artist_id = db.Column(db.Integer, db.ForeignKey('artists.id'))
+    artist_id = db.Column(db.Integer, db.ForeignKey('artists.id'), nullable=False)
+    venue_id = db.Column(db.Integer, db.ForeignKey('venues.id'), nullable=False)
     
-
-    #def __repr__(self):
-        #return '<Show {}{}>'.format(self.artist_id, self.venue_id)
+    def __repr__(self):
+        return f'Show {self.id}: Artist {self.artist_id} Venue {self.venue_id} at {self.start_time}'
