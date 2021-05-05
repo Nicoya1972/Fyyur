@@ -46,8 +46,8 @@ class Show(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     start_time = db.Column(db.DateTime, nullable=False)
-    artist_id = db.Column(db.Integer, db.ForeignKey('artists.id'), nullable=False)
-    venue_id = db.Column(db.Integer, db.ForeignKey('venues.id'), nullable=False)
+    artist_id = db.Column(db.Integer, db.ForeignKey('Artists.id'), nullable=False)
+    venue_id = db.Column(db.Integer, db.ForeignKey('Venues.id'), nullable=False)
     
     def __repr__(self):
         return f'Show {self.id}: Artist {self.artist_id} Venue {self.venue_id} at {self.start_time}'
